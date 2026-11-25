@@ -4,8 +4,16 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
-const ENTRY =
-  "My smart fridge pushed a firmware update and now it won't open until I accept the new terms \u2014 a $3,000 box holding my leftovers hostage until I pay it in ads.";
+function buildEntryLine(): string {
+  return "My smart fridge pushed a firmware update and now it won't open until I accept the new terms \u2014 a $3,000 box holding my leftovers hostage until I pay it in ads.";
+}
+
+const ENTRY = buildEntryLine();
+
+// Kit gate (RULES.txt): entry must be UTF-8 text of 1–200 characters, not only whitespace.
+if (ENTRY.length < 1 || ENTRY.length > 200 || ENTRY.trim().length === 0) {
+  throw new Error("entry fails the 1–200 character gate");
+}
 
 function resolveOutputPath(): string {
   const dir =
